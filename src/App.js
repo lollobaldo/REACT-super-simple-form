@@ -3,8 +3,19 @@ import './App.css';
 
 import {Form, Input, ErrorMessage} from './Form';
 
-const validator = (values) => {
-  return {};
+const validators = {
+  name(value) {
+    console.log(value);
+    if (value !== "ciao") {
+      return ("name must equal 'ciao'");
+    }
+  },
+  email(value) {
+    if (!value || value.indexOf("@") === -1) {
+      console.log(value.indexOf("@") === -1)
+      return ("The email must contain '@'");
+    }
+  }
 }
 
 const onSubmit = ({errors, values}, event) => {
@@ -16,7 +27,7 @@ function App() {
     <Form
       className="modal-form"
       // initialValues={}
-      validator={validator}
+      validators={validators}
       onSubmit={onSubmit}>
       <label htmlFor="name">Project name</label>
       <Input
@@ -29,12 +40,9 @@ function App() {
       <label htmlFor="language">Programming language</label>
       <Input
         type="text"
-        name="language"
+        name="email"
         placeholder="Node.js" />
-      <ErrorMessage
-        name="language"
-        className="error"
-        component="div" />
+      <ErrorMessage name="email" />
       <div className="modal-form-clearfix">
         <input
           type="submit"

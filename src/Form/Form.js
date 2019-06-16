@@ -8,11 +8,16 @@ const SetValueContext = React.createContext(() => {});
 export const FormConsumer = ({ children }) => {
   return (
     <ErrorsContext.Consumer>
-      {errors => (
+      {(errors) => (
         <ValuesContext.Consumer>
-          {values => (
+          {(values) => (
             <SetValueContext.Consumer>
-              {handleInputChange => children({errors, values, handleInputChange})}
+              {({handleInputChange, handleInputBlur}) => 
+                children({
+                  errors,
+                  values,
+                  handleInputChange,
+                  handleInputBlur,})}
             </SetValueContext.Consumer>
           )}
         </ValuesContext.Consumer>
@@ -38,6 +43,27 @@ class Form extends Component {
         [event.target.name]: event.target.value,
       }
     });
+    if (this.state.errors[event.target.name]) {
+      this._validate(event.target.name);
+    }
+  }
+
+  handleInputBlur(event) {
+    // console.log("about to validate " + event.target.name);
+    this._validate(event.target.name);
+  }
+
+  _validate (input) {
+    // console.log("validating");
+    const value = this.state.values[input];
+    const error = this.props.validators[input](value);
+    const errors = this.state.errors;
+    this.setState({
+      errors: {
+        ...errors,
+        [input]: error,
+      }
+    });
   }
 
   _onSubmit (event) {
@@ -46,13 +72,6 @@ class Form extends Component {
     const errors = this._validate();
     this.setState({errors});
     this.props.onSubmit({errors, values}, event);
-  }
-
-  _validate () {
-    let errors = this.props.validator(this.state.values);
-    // errors = errors.filter(e => !!e); // Filter not-empty errors
-    return Object.keys(errors).length > 0 ? errors : {};
-    // return {};
   }
 
   render () {
@@ -66,7 +85,9 @@ class Form extends Component {
     return (
       <ValuesContext.Provider value={this.state.values}>
         <ErrorsContext.Provider value={this.state.errors}>
-          <SetValueContext.Provider value={this.handleInputChange.bind(this)}>
+          <SetValueContext.Provider value={{
+            handleInputChange: this.handleInputChange.bind(this),
+            handleInputBlur: this.handleInputBlur.bind(this)}}>
             <form
               onSubmit={this._onSubmit.bind(this)} {...rest}>
                 {children}
@@ -79,14 +100,14 @@ class Form extends Component {
 }
 
 Form.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  validators: PropTypes.object,
+  defaultValues: PropTypes.object,
   children: PropTypes.any,
-  validator: PropTypes.func,
-  onSubmit: PropTypes.func,
-  defaultValues: PropTypes.object
 };
 
 Form.defaultProps = {
-  validator: () => {},
+  validators: () => {},
   onSubmit: () => {},
   defaultValues: {}
 };

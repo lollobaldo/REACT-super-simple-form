@@ -17,8 +17,8 @@ It is a wrapper component, so it can take any children elemeny.
 
 ```javascript
 Form.propTypes = {
-  onSubmit: PropTypes.func,
-  validator: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
+  validator: PropTypes.object,
   defaultValues: PropTypes.object
   children: PropTypes.arrayOf(PropTypes.element),
 };
@@ -38,6 +38,16 @@ Input.propTypes = {
   name: PropTypes.string.isRequired
 };
 ```
+
+###Validator###
+Validator is an object containing a validator function for each input.
+This function takes the value of the input, and an object containing all the
+values in the form.
+
+#ToDo:#
+-[ ] Add 
+-[ ] Test support for checklist input type.
+-[ ] Add default validation.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

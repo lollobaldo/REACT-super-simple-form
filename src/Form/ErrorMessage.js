@@ -15,9 +15,11 @@ const _extractErrorObject = (error) => {
 const ErrorMessage = ({name, ...rest}) => (
   <FormConsumer>
     {({errors}) => {
-      const errorMessage = _extractErrorObject(errors[name]);
+      const errorMessage = errors[name];
       return (
-        errorMessage ? <span {...rest}>{errorMessage}</span> : null
+        errorMessage
+          ? <p className="error-message" {...rest}>{errorMessage}</p>
+          : null
       );
     }}
   </FormConsumer>

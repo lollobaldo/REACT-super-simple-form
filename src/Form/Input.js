@@ -6,13 +6,13 @@ const Input = ({
   name,
   ...rest}) => (
   <FormConsumer>
-    {({values, handleInputChange}) => {
+    {({values, handleInputChange, handleInputBlur}) => {
       return (
         <input
           name={name}
           value={values[name] || ""}
           onChange={handleInputChange}
-          // onBlur={handleInputBlur}
+          onBlur={handleInputBlur}
           {...rest} />
       );
     }}
