@@ -37,15 +37,17 @@ class Form extends Component {
 
   handleInputChange(event) {
     const values = this.state.values;
+    const target = event.target.name
+
     this.setState({
       values: {
         ...values,
-        [event.target.name]: event.target.value,
+        [target]: event.target.value,
       }
-    });
-    if (this.state.errors[event.target.name]) {
-      this._validate(event.target.name);
-    }
+    }, () => {
+      if (this.state.errors[target]) {
+        this._validate(target);
+      }});
   }
 
   handleInputBlur(event) {
@@ -56,7 +58,7 @@ class Form extends Component {
   _validate (input) {
     // console.log("validating");
     const value = this.state.values[input];
-    const error = this.props.validators[input](value);
+    const error = this.props.validators[input](value, this.state.values);
     const errors = this.state.errors;
     this.setState({
       errors: {
