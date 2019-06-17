@@ -57,7 +57,7 @@ class Form extends Component {
     }, () => {
       if (this.state.errors[name] && this.state.errors[name].message) {
         this._validate(name);
-      }});
+    }});
   }
 
   handleInputBlur(event) {
