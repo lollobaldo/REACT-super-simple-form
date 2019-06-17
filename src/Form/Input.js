@@ -10,7 +10,7 @@ const Input = ({
       return (
         <input
           name={name}
-          value={values[name] || ""}
+          value={(values[name] && values[name].value) || ""}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           {...rest} />

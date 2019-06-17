@@ -29,42 +29,62 @@ export const FormConsumer = ({ children }) => {
 class Form extends Component {
   constructor (props) {
     super(props);
+    let values = {};
+    for (const key in props.defaultValues.keys) {
+      values[key] = {
+        touched: true,
+        value: props.defaultValues[key],
+      }
+    }
     this.state = {
-      values: props.defaultValues,
-      errors: {}
+      values: values,
+      errors: {},
     };
   }
 
   handleInputChange(event) {
     const values = this.state.values;
-    const target = event.target.name
+    const name = event.target.name;
 
     this.setState({
       values: {
         ...values,
-        [target]: event.target.value,
+        [name]: {
+          touched: values[name] && values[name].touched,
+          value: event.target.value,
+        }
       }
     }, () => {
-      if (this.state.errors[target] && this.state.errors[target].message) {
-        this._validate(target);
+      if (this.state.errors[name] && this.state.errors[name].message) {
+        this._validate(name);
       }});
   }
 
   handleInputBlur(event) {
-    // console.log("about to validate " + event.target.name);
+    const values = this.state.values;
+    const name = event.target.name;
+    this.setState({
+      values: {
+        ...values,
+        [name]: {
+          touched: this.state.values[name],
+          value: event.target.value,
+        }
+      }
+    })
     this._validate(event.target.name);
   }
 
-  _validate (input) {
+  _validate (name) {
     // console.log("validating");
-    const value = this.state.values[input];
-    const error = this.props.validators[input](value, this.state.values);
+    const value = this.state.values[name].value;
+    const error = this.props.validators[name](value, this.state.values);
     const errors = this.state.errors;
     // console.log(error);
     this.setState({
       errors: {
         ...errors,
-        [input]: {
+        [name]: {
           isError: error instanceof Error,
           message: error instanceof Error ? error.message : error
         },

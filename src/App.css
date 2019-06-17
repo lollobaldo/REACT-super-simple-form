@@ -67,3 +67,14 @@
   margin: 0;
   color: orange;
 }
+
+.icon-right,
+.icon-wrong {
+  float: right;
+  position: relative;
+  top: -1.8em;
+  right: 1em;
+}
+
+.icon-right {color: #0a0;}
+.icon-wrong {color: #f00;}
