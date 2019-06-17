@@ -1,21 +1,16 @@
 import React from 'react';
 import './App.css';
 
-import {Form, Input, ErrorMessage} from './Form';
+import {Form, Input, ErrorMessage, Validators} from './Form';
 
 const validators = {
   name(value) {
-    console.log(value);
+    // console.log(value);
     if (value !== "ciao") {
-      return ("name must equal 'ciao'");
+      return Error("Error: Name must equal 'ciao'.");
     }
   },
-  email(value) {
-    if (!value || value.indexOf("@") === -1) {
-      console.log(value.indexOf("@") === -1)
-      return ("The email must contain '@'");
-    }
-  }
+  email: Validators.email,
 }
 
 const onSubmit = ({errors, values}, event) => {

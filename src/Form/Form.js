@@ -45,7 +45,7 @@ class Form extends Component {
         [target]: event.target.value,
       }
     }, () => {
-      if (this.state.errors[target]) {
+      if (this.state.errors[target] && this.state.errors[target].message) {
         this._validate(target);
       }});
   }
@@ -60,10 +60,14 @@ class Form extends Component {
     const value = this.state.values[input];
     const error = this.props.validators[input](value, this.state.values);
     const errors = this.state.errors;
+    // console.log(error);
     this.setState({
       errors: {
         ...errors,
-        [input]: error,
+        [input]: {
+          isError: error instanceof Error,
+          message: error instanceof Error ? error.message : error
+        },
       }
     });
   }

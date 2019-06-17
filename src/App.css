@@ -62,3 +62,8 @@
   margin: 0;
   color: red;
 }
+
+.modal-form .warning-message {
+  margin: 0;
+  color: orange;
+}
