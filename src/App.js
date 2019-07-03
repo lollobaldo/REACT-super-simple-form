@@ -16,7 +16,7 @@ const validators = {
   email: Validators.email,
 }
 
-const onSubmit = ({errors, values}, event) => {
+const onSubmit = ({values, errors}, event) => {
   console.log(values);
 }
 

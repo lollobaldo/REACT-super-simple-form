@@ -77,7 +77,8 @@ class Form extends Component {
 
   _validate (name) {
     // console.log("validating");
-    const value = this.state.values[name].value;
+    const value = this.state.values[name] && this.state.values[name].value;
+    console.log(this.props.validators[name]);
     const error = this.props.validators[name](value, this.state.values);
     const errors = this.state.errors;
     // console.log(error);
@@ -95,9 +96,13 @@ class Form extends Component {
   _onSubmit (event) {
     event.preventDefault();
     const values = this.state.values;
-    const errors = this._validate();
-    this.setState({errors});
-    this.props.onSubmit({errors, values}, event);
+    const ret = {};
+    // eslint-disable-next-line array-callback-return
+    Object.keys(values).map(function(key) {
+      ret[key] = values[key].value;
+    });
+    const errors = this.state.errors;
+    this.props.onSubmit({ret, errors}, event);
   }
 
   render () {
